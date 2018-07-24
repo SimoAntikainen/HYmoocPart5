@@ -72,7 +72,9 @@ class App extends React.Component {
   }
 
   nollaaTilastot = () => {
-    
+    //return () => {}
+    store.dispatch({type : 'ZERO'})
+
   }
 
   render() {
@@ -84,8 +86,9 @@ class App extends React.Component {
         <button onClick={this.klik('OK')}>neutraali</button>
         <button onClick={this.klik('BAD')}>huono</button>
         <Statistiikka counter={store.getState()} keskiarvo={this.laskeKeskiarvo(store.getState())}
-          positiiviset={this.laskePositiiviset(store.getState())
-          }/>
+          positiiviset={this.laskePositiiviset(store.getState())}
+          nollaa={this.nollaaTilastot}
+          />
       </div>
     )
   }

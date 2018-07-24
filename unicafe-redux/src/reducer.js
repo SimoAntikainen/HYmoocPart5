@@ -23,7 +23,7 @@ const counterReducer = (state = initialState, action) => {
       return newStats
     }
     case 'ZERO':
-      return state
+      return initialState
   }
   return state
 }
