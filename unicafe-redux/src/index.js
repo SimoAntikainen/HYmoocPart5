@@ -72,9 +72,7 @@ class App extends React.Component {
   }
 
   nollaaTilastot = () => {
-    //return () => {}
     store.dispatch({type : 'ZERO'})
-
   }
 
   render() {
