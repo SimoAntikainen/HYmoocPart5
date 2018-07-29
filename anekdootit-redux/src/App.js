@@ -2,6 +2,15 @@ import React from 'react';
 
 
 class App extends React.Component {
+  addLike = (id) => () => {
+    console.log("csfds")
+    this.props.store.dispatch({
+      type: 'VOTE',
+      data: { id }
+      }
+    )
+  }
+
   render() {
     const anecdotes = this.props.store.getState()
     return (
@@ -14,7 +23,7 @@ class App extends React.Component {
             </div>
             <div>
               has {anecdote.votes}
-              <button>vote</button>
+              <button onClick={this.addLike(anecdote.id)}>vote</button>
             </div>
           </div>
         )}
