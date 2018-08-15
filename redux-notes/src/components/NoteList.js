@@ -13,8 +13,8 @@ class NoteList extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribe()
-  }
-    
+  } 
+
   toggleImportance = (id) => (e) => {
     this.props.store.dispatch(
       importanceToggling(id)
