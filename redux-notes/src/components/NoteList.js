@@ -4,57 +4,40 @@ import { importanceToggling } from './../reducers/noteReducer'
 import Note from './Note'
 import { connect } from 'react-redux'
 
-class NoteList extends React.Component {
-  /**componentDidMount() {
-    const { store } = this.context
-    this.unsubscribe = store.subscribe(() =>
-      this.forceUpdate()
-    )
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe()
-  }**/
-
-  /**toggleImportance = (id) => () => {
-    this.context.store.dispatch(
-      importanceToggling(id)
-    )
-  }**/
-  render() {
-    const notesToShow = () => {
-      const { notes, filter } = this.props
-      if (filter === 'ALL') {
-        return notes
-      }
-
-      return filter === 'IMPORTANT'
-        ? notes.filter(note => note.important)
-        : notes.filter(note => !note.important)
-    }
-
-    return (
-      <ul>
-        {notesToShow().map(note =>
-          <Note
-            key={note.id}
-            note={note}
-            handleClick={() => this.props.importanceToggling(note.id)}
-          />
-        )}
-      </ul>
-    )
-  }
-}
+const NoteList = (props) => (
+  <ul>
+    {props.visibleNotes.map(note =>
+      <Note
+        key={note.id}
+        note={note}
+        handleClick={() => props.importanceToggling(note.id)}
+      />
+    )}
+  </ul>
+)
 
 /**NoteList.contextTypes = {
   store: PropTypes.object
 }**/
 
-const mapStateToProps = (state) => {
+/**const mapStateToProps = (state) => {
   return {
     notes: state.notes,
     filter: state.filter
+  }
+}**/
+const notesToShow = (notes, filter) => {
+  if (filter === 'ALL') {
+    return notes
+  }
+  return filter === 'IMPORTANT'
+    ? notes.filter(note => note.important)
+    : notes.filter(note => !note.important)
+}
+
+const mapStateToProps = (state) => {
+  return {
+    visibleNotes: notesToShow(state.notes, state.filter)
   }
 }
 
