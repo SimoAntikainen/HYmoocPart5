@@ -1,8 +1,7 @@
 import React from 'react'
-//import PropTypes from 'prop-types'
-import { importanceToggling } from './../reducers/noteReducer'
-import Note from './Note'
 import { connect } from 'react-redux'
+import { toggleImportance } from './../reducers/noteReducer'
+import Note from './Note'
 
 const NoteList = (props) => (
   <ul>
@@ -10,22 +9,12 @@ const NoteList = (props) => (
       <Note
         key={note.id}
         note={note}
-        handleClick={() => props.importanceToggling(note.id)}
+        handleClick={() => props.toggleImportance(note)}
       />
     )}
   </ul>
 )
 
-/**NoteList.contextTypes = {
-  store: PropTypes.object
-}**/
-
-/**const mapStateToProps = (state) => {
-  return {
-    notes: state.notes,
-    filter: state.filter
-  }
-}**/
 const notesToShow = (notes, filter) => {
   if (filter === 'ALL') {
     return notes
@@ -41,15 +30,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = {
-  importanceToggling
-}
-
-const ConnectedNoteList = connect(
+export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { toggleImportance }
 )(NoteList)
-
-export default ConnectedNoteList
-
-//export default NoteList

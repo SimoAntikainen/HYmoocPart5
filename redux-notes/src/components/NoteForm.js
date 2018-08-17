@@ -1,9 +1,32 @@
 import React from 'react'
-import { noteCreation } from './../reducers/noteReducer'
+import { createNew } from './../reducers/noteReducer'
 import { connect } from 'react-redux'
-import noteService from '../services/notes'
 
 class NoteForm extends React.Component {
+
+  addNote = async (event) => {
+    event.preventDefault()
+    const content = event.target.note.value
+    event.target.note.value = ''
+    this.props.createNew(content)
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.addNote}>
+        <input name="note" />
+        <button>lisää</button>
+      </form>
+    )
+  }
+}
+
+export default connect(
+  null,
+  { createNew }
+)(NoteForm)
+
+/**class NoteForm extends React.Component {
 
   addNote = async (event) => {
     event.preventDefault()
@@ -26,7 +49,7 @@ class NoteForm extends React.Component {
 export default connect(
   null,
   { noteCreation }
-)(NoteForm)
+)(NoteForm)**/
 
 /**import React from 'react'
 import PropTypes from 'prop-types'
