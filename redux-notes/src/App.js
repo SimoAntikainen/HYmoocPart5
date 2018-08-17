@@ -3,6 +3,8 @@ import {
   BrowserRouter as Router,
   Route, Link, Redirect
 } from 'react-router-dom'
+import { Table, FormGroup, FormControl, ControlLabel, Button, Alert,
+        Navbar, NavbarBrand,NavItem, Nav, MenuItem, NavDropdown } from 'react-bootstrap'
 
 const Home = () => (
   <div>
@@ -24,13 +26,20 @@ const Note = ({note}) => {
 const Notes = ({notes}) => (
   <div>
     <h2>Notes</h2>
-    <ul>
-      {notes.map(note=>
-        <li key={note.id}>
-          <Link to={`/notes/${note.id}`}>{note.content}</Link>
-        </li>
-      )}
-    </ul>  
+    <Table striped>
+      <tbody>
+        {notes.map(note=>
+          <tr key={note.id}>
+            <td>
+              <Link to={`/notes/${note.id}`}>{note.content}</Link>
+            </td>
+            <td>
+              {note.user}
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </Table>  
   </div>
 )
 
@@ -46,22 +55,27 @@ const Users = ({notes}) => (
 )
 
 const Login = ({onLogin, history}) => {
-  const onSubmit = (event) => {
-    event.preventDefault()
-    onLogin('mluukkai')
+  const onSubmit = (e) => {
+    e.preventDefault()
+    onLogin(e.target.username.value)
     history.push('/')
   }
   return (
   <div>
     <h2>login</h2>
     <form onSubmit={onSubmit}>
-      <div>
-        username: <input />
-      </div>
-      <div>
-        password: <input type='password'/>
-      </div>      
-      <button type="submit">login</button>
+      <FormGroup>
+        <ControlLabel>username:</ControlLabel>
+        <FormControl 
+          type='text'
+          name='username'
+        />  
+        <ControlLabel>password:</ControlLabel>
+        <FormControl
+          type='password'
+        />             
+        <Button bsStyle="success" type='submit'>login</Button>
+      </FormGroup>
     </form>
   </div>
 )}
@@ -95,26 +109,59 @@ class App extends React.Component {
   }
 
   login = (user) => {
-    this.setState({user})
+    this.setState({ user, message: `welcome ${user}` })
+    setTimeout(() => {
+      this.setState({ message: null })
+    }, 10000);
   }
 
   render() {
     const noteById = (id) =>
       this.state.notes.find(note => note.id === Number(id)) 
 
+    const style = {
+      color: 'green',
+      fontStyle: 'italic',
+      fontSize: 16
+    }
+
     return (
-      <div>        
+      <div className='container'>        
         <Router>
           <div>
-            <div>
-              <Link to="/">home</Link> &nbsp;
-              <Link to="/notes">notes</Link> &nbsp;
-              <Link to="/users">users</Link> &nbsp;
-              {this.state.user
-                ? <em>{this.state.user} logged in</em> 
-                : <Link to="/login">login</Link>
-              }
-            </div>
+            {(this.state.message &&
+              <Alert color="success">
+                {this.state.message}
+              </Alert>
+            )}
+
+            <Navbar inverse collapseOnSelect>
+              <Navbar.Header>
+                <Navbar.Brand>
+                  Anecdote app                
+                </Navbar.Brand>
+                <Navbar.Toggle />
+              </Navbar.Header>
+              <Navbar.Collapse>
+                <Nav>
+                  <NavItem href="#">
+                    <Link to="/">home</Link>
+                  </NavItem>
+                  <NavItem href="#">
+                    <Link to="/notes">notes</Link>
+                  </NavItem>
+                  <NavItem href="#">
+                    <Link to="/users">users</Link>
+                  </NavItem>
+                  <NavItem>
+                    {this.state.user
+                      ? <em>{this.state.user} logged in</em>
+                      : <Link to="/login">login</Link>
+                    }
+                  </NavItem>                        
+                </Nav>  
+              </Navbar.Collapse>
+            </Navbar>
 
             <Route exact path="/" render={() => <Home />} />
             <Route exact path="/notes" render={() => <Notes notes={this.state.notes}/>} />
@@ -131,12 +178,12 @@ class App extends React.Component {
             />
           </div>
         </Router>
-        <div>
+        <div style={style}>
           <br />
           <em>Note app, Department of Computer Science 2018</em>
         </div>  
       </div>
-    );
+    )
   }
 }
 
